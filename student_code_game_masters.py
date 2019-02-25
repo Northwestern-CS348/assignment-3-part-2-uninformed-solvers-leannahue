@@ -152,7 +152,7 @@ class Puzzle8Game(GameMaster):
         ### Student code goes here
         tiles = {}
         tile = ''
-        ask_start = "fact: (xyspot ?tile "
+        ask_start = "fact: (coordinate ?tile "
         tuples = []
         for xpos in range(3):
             col = "pos" + str(xpos + 1)
@@ -200,22 +200,16 @@ class Puzzle8Game(GameMaster):
         dest_y = movable_statement.terms[4].term.element
 
         # Retract old tile and empty spots
-        old_tile_spot = parse_input("fact: (xyspot " + tile + " " + init_x + " " + init_y + ")")
+        old_tile_spot = parse_input("fact: (coordinate " + tile + " " + init_x + " " + init_y + ")")
         self.kb.kb_retract(old_tile_spot)
-        old_empty_spot = parse_input("fact: (xyspot empty " + dest_x + " " + dest_y + ")")
+        old_empty_spot = parse_input("fact: (coordinate empty " + dest_x + " " + dest_y + ")")
         self.kb.kb_retract(old_empty_spot)
 
         # Change tile destination spot
-        new_tile_spot = parse_input("fact: (xyspot " + tile + " " + dest_x + " " + dest_y + ")")
+        new_tile_spot = parse_input("fact: (coordinate " + tile + " " + dest_x + " " + dest_y + ")")
         self.kb.kb_assert(new_tile_spot)
-        new_empty_spot = parse_input("fact: (xyspot empty " + init_x + " " + init_y + ")")
+        new_empty_spot = parse_input("fact: (coordinate empty " + init_x + " " + init_y + ")")
         self.kb.kb_assert(new_empty_spot)
-
-        # Change empty from dest to init
-        old_empty = parse_input("fact: (empty " + dest_x + " " + dest_y + ")")
-        self.kb.kb_retract(old_empty)
-        new_empty = parse_input("fact: (empty " + init_x + " " + init_y + ")")
-        self.kb.kb_assert(new_empty)
 
         return
 
